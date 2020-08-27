@@ -1,0 +1,17 @@
+{
+  "name": "bes-eslint-project",
+  "version": "1.0.0",
+  "description": "利用node.js/webpack/eslint 搭建一个js静态检查工程",
+  "main": "index.js",
+  "dependencies": {
+    "eslint": "^7.7.0",
+    "eslint-loader": "^4.0.2",
+    "webpack": "^4.44.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shangyukang",
+  "license": "MIT"
+}

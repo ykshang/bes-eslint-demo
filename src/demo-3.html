@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Hello, world!</title>
+</head>
+
+<body>
+  <div id="app">
+    <input id="txtName" />
+  </div>
+  <script>
+    let data = {};
+    
+    function oninput(e) {
+      data.name = e.target.value;
+      console.log(data);
+    }
+
+    let txtName = document.getElementById('txtName');
+    txtName.addEventListener('input', oninput);
+
+    let val = data.name;
+    Object.defineProperty(data, 'name', {
+      get() {
+        return val;
+      },
+      set(newVal) {
+        val = newVal;
+        txtName.value = data.name;
+      }
+    });
+
+    data.name = 'hello, world';
+  </script>
+</body>
+
+</html>

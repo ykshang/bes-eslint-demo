@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Hello, world!</title>
+</head>
+
+<body>
+  <div id="app">
+    <input b-model="foo" />
+    <input b-model="foo" />
+    <input b-model="foo" />
+    <input b-model="foo" />
+    <input b-model="foo" />
+    <input b-model="foo" />
+    <input b-model="foo" />
+    <input b-model="foo" />
+  </div>
+
+  <script>
+    let Ben = function (options) {
+      this._data = options.data ?
+        typeof options.data === 'function' ? options.data.call(this) : options.data : {};
+
+      this._watcher;
+
+      function Dep() {
+        this.subs = [];
+      }
+
+      Dep.prototype.addSub = function (sub) {
+        this.subs.push(sub);
+      }
+
+      Dep.prototype.removeSub = function (sub) {
+        var index = this.subs.indexOf(sub);
+        if (index > -1) {
+          this.subs.splice(index, 1)
+        }
+      }
+
+      Dep.prototype.notify = function () {
+        for (let i = 0; i < this.subs.length; i++) {
+          this.subs[i].update();
+        }
+      }
+
+      Dep.prototype.depend = function () {
+        if (Dep.target) {
+          Dep.target.addDep(this);
+        }
+      }
+
+      Dep.target = null;
+
+      function Observer (value) {
+        this.value = value;
+        Object.defineProperty(value, '__ob__', this);
+        if (value instanceof Array) {
+
+        } else {
+          this.walk(value);
+        }
+      }
+
+      Observer.prototype.walk = function (obj) {
+        for (let key in obj) {
+          if (obj[key] instanceof Array) {
+
+          } else if (obj[key]) {
+            defineReactive(obj, key);
+          }
+        }
+      }
+
+      function Watcher(vm, cb) {
+        this.vm = vm;
+        this.cb = cb;
+        Dep.target = this;
+        this.deps = [];
+      }
+
+      Watcher.prototype.update = function (value) {
+        for (let i = 0; i < this.deps.length; i++) {
+          this.cb.call(this.vm, value);
+        }
+      }
+
+      Watcher.prototype.addDep = function (dep) {
+        if (this.deps.indexOf(dep) === -1) {
+          this.deps.push(dep);
+          dep.addSub(this);
+        }
+      }
+
+      function defineReactive(obj, key) {
+        let dep = new Dep();
+        let val = obj[key];
+        Object.defineProperty(obj, key, {
+          get() {
+            dep.depend();
+            return val;
+          },
+          set(newVal) {
+            if (val !== newVal) {
+              val = newVal; // TODO：搞明白为什么是这样赋值
+              dep.notify();
+            }
+          }
+        });
+      }
+
+      function observe(obj) {
+        let ob;
+        if (Object.hasOwnProperty(obj, '__ob__') && obj.__ob__ instanceof Observer) {
+          ob = obj.__ob__;
+        } else {
+          ob = new Observer(obj);
+        }
+        return ob;
+      }
+      
+      function proxy(target, sourceKey, key) {
+        Object.defineProperty(target, key, {
+          get() {
+            return target[sourceKey][key];
+          },
+          set(newVal) {
+            target[sourceKey][key] = newVal;
+          }
+        });
+      }
+
+      for (let key in this._data) {
+        proxy(this, '_data', key);
+      }
+
+      function initData(vm) {
+        let data = vm._data;
+        observe(data);
+      }
+
+      function mount(vm) {
+        let root = document.querySelector(options.el);
+        for (let element of root.children) {
+          if ('b-model' in element.attributes) {
+            let k = element.attributes['b-model'].value;
+            if (!(k in vm._data)) {
+              throw new Error(`${k} is not defined.`);
+            }
+
+            if (element.tagName.toLowerCase() === 'input') {
+              if (element.type === 'text') {
+                element.addEventListener('input', function(e) {
+                  vm._data[k] = e.target.value;
+                });
+              }
+            }
+          }
+        }
+        
+        vm._watcher = new Watcher(vm, function() {
+          render(vm);
+        });
+      }
+
+      function render(vm) {
+        let root = document.querySelector(options.el);
+        for (let element of root.children) {
+          if ('b-model' in element.attributes) {
+            let k = element.attributes['b-model'].value;
+            if (!(k in vm._data)) {
+              throw new Error(`${k} is not defined.`);
+            }
+
+            if (element.tagName.toLowerCase() === 'input') {
+              if (element.type === 'text') {
+                element.value = vm._data[k];
+              }
+            }
+          }
+        }
+      }
+
+      initData(this);
+      mount(this);
+      render(this);
+
+      // console.log(this._data);
+    };
+
+    let vm = new Ben({
+      el: '#app',
+      data() {
+        return {
+          foo: 'bar',
+          foo2: 'bar2'
+        };
+      }
+    });
+    // vm.foo = '1122';
+  </script>
+</body>
+
+</html>
