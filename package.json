@@ -4,11 +4,23 @@
   "description": "利用node.js/webpack/eslint 搭建一个js静态检查工程",
   "main": "index.js",
   "dependencies": {
-    "eslint": "^7.7.0",
-    "eslint-loader": "^4.0.2",
-    "webpack": "^4.44.1"
+    "babel-eslint": "^10.1.0",
+    "eslint-plugin-html": "^6.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "html-loader": "^1.3.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
