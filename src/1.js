@@ -1,4 +1,4 @@
-var run = function (A, B) {
+function aa(A, B, c, d) {
   var max = '';
   if (A === B) {
     return A;
@@ -8,4 +8,7 @@ var run = function (A, B) {
 };
 var A = 1;
 var B = 1;
-run(A, B);
+run(A, B, c, d);
+var a = $('1').size();
+a == $('1').si();
+a == $('1').size();
